@@ -2,11 +2,14 @@
 This laboratory is available on Port Swigger´s Web Academy, you can access it using the following link: https://portswigger.net/web-security/file-path-traversal/lab-simple. 
 (Esse laboratorio está disponível na Web Academy, você pode acessa-lo usando o seguinte link: https://portswigger.net/web-security/file-path-traversal/lab-simple)
 
-Para começar, é necessário configurar seu proxy, Burp Suite, a interceptar as requisições enviadas pelo seu navegador.
+To begin, it´s necessary to config your web proxy, Burp Suite, to intercept the requests sent by your browser.
+(Para começar, é necessário configurar seu proxy, Burp Suite, a interceptar as requisições enviadas pelo seu navegador.)
 
-Parte I:
+Part I:
+(Parte I:)
 
-Primeiro, eu interceptei uma requisição feita a um dos produtos disponíveis no website, essa requisição tinha o seguinte conteúdo:
+First, i intercepted a request made to one of the available products on the web application, that request had the following content:
+(Primeiro, eu interceptei uma requisição feita a um dos produtos disponíveis no website, essa requisição tinha o seguinte conteúdo:)
 
 GET /product?productId=1 HTTP/1.1
 Host: 0acb003f042a5a72824d249c002c0011.web-security-academy.net
@@ -25,7 +28,8 @@ Priority: u=0, i
 Te: trailers
 Connection: keep-alive
 
-Após encaminhar essa requisição, é realizada mais uma requisição usada para trazer a imagem do produto para a pagina:
+After i forwarded this request, it´s performed another request that brings the background image of the product to the webpage:
+(Após encaminhar essa requisição, é realizada mais uma requisição usada para trazer a imagem do produto para a pagina:)
 
 GET /image?filename=24.jpg HTTP/2
 Host: 0acb003f042a5a72824d249c002c0011.web-security-academy.net
