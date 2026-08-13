@@ -1,1 +1,28 @@
+Lab Description:
 
+This lab has an unprotected admin panel. Solve the lab by deleting the user carlos. 
+
+For this lab, i didnt use Burp or any other proxy, i just typed the URL on the browser and waited for the response. My first guess was to request the following URL:
+
+https://LAB_ID.web-security-academy.net/admin
+
+But the response showed me that this page, at least with this name, does not exist on the server. So the next step, was to see if the application had the robots.txt file, using the request:
+
+https://LAB_ID.web-security-academy.net/robots.txt
+
+Well, the application has a robots.txt file with the following content:
+
+User-agent: *
+Disallow: /administrator-panel
+
+I had found the admin page, so to complete the lab, i just requested the following URL:
+
+https://LAB_ID.web-security-academy.net/administrator-panel
+
+The web page shows two users and the option to delete them.
+
+Users
+wiener - Delete
+carlos - Delete
+
+To solve the lab, i deleted the user carlos as was asked on description.
