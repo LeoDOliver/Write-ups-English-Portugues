@@ -1,1 +1,167 @@
+Lab Description:
+
+This lab has an unprotected admin panel. It's located at an unpredictable location, but the location is disclosed somewhere in the application.
+Solve the lab by accessing the admin panel, and using it to delete the user carlos. 
+
+As the description of the lab says, the admin panel is in a unpredictable URL, so this application doens´t have the robots.txt file or a admin panel em in a URL such as /admin. I start Burp and walk the application.
+I request the my-account page:
+
+GET /my-account HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://LAB_ID.web-security-academy.net/
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+Connection: keep-alive
+
+I receive back a 302 Response, that means a redirect:
+
+HTTP/2 302 Found
+Location: /login
+X-Frame-Options: SAMEORIGIN
+Content-Length: 0
+
+And the redirect is to the login page, i forwarded the request:
+
+Request:
+
+GET /login HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://LAB_ID.web-security-academy.net/
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+
+Response:
+
+HTTP/2 200 OK
+Content-Type: text/html; charset=utf-8
+X-Frame-Options: SAMEORIGIN
+Content-Length: 3753
+
+<!DOCTYPE html>
+<html>
+<!--LAB_HEAD_START-->
+    <head>
+        <link href=/resources/labheader/css/academyLabHeader.css rel=stylesheet>
+        <link href=/resources/css/labs.css rel=stylesheet>
+        <title>Unprotected admin functionality with unpredictable URL</title>
+    </head>
+<!--LAB_HEAD_END-->
+    <body>
+        <script src="/resources/labheader/js/labHeader.js"></script>
+        <!--LAB_HEADER_START-->
+        <div id="academyLabHeader">
+            <section class='academyLabBanner'>
+                <div class=container>
+                    <div class=logo></div>
+                        <div class=title-container>
+                            <h2>Unprotected admin functionality with unpredictable URL</h2>
+                            <a class=link-back href='https://portswigger.net/web-security/access-control/lab-unprotected-admin-functionality-with-unpredictable-url'>
+                                Back&nbsp;to&nbsp;lab&nbsp;description&nbsp;
+                                <svg version=1.1 id=Layer_1 xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x=0px y=0px viewBox='0 0 28 30' enable-background='new 0 0 28 30' xml:space=preserve title=back-arrow>
+                                    <g>
+                                        <polygon points='1.4,0 0,1.2 12.6,15 0,28.8 1.4,30 15.1,15'></polygon>
+                                        <polygon points='14.3,0 12.9,1.2 25.6,15 12.9,28.8 14.3,30 28,15'></polygon>
+                                    </g>
+                                </svg>
+                            </a>
+                        </div>
+                        <div class='widgetcontainer-lab-status is-notsolved'>
+                            <span>LAB</span>
+                            <p>Not solved</p>
+                            <span class=lab-status-icon></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!--LAB_HEADER_END-->
+        <div theme="">
+            <section class="maincontainer">
+                <div class="container is-page">
+                    <header class="navigation-header">
+                        <section class="top-links">
+                            <a href=/>Home</a><p>|</p>
+                            <script>
+var isAdmin = false;
+if (isAdmin) {
+   var topLinksTag = document.getElementsByClassName("top-links")[0];
+   var adminPanelTag = document.createElement('a');
+   adminPanelTag.setAttribute('href', '/admin-RandomID');
+   adminPanelTag.innerText = 'Admin panel';
+   topLinksTag.append(adminPanelTag);
+   var pTag = document.createElement('p');
+   pTag.innerText = '|';
+   topLinksTag.appendChild(pTag);
+}
+</script>
+                            <a href="/my-account">My account</a><p>|</p>
+                        </section>
+                    </header>
+                    <header class="notification-header">
+                    </header>
+                    <h1>Login</h1>
+                    <section>
+                        <form class=login-form method=POST action="/login">
+                            <input required type="hidden" name="csrf" value="g3ms5kqBHa2dILU8P3WX6tedPChJbrrt">
+                            <label>Username</label>
+                            <input required type=username name="username" autofocus>
+                            <label>Password</label>
+                            <input required type=password name="password">
+                            <button class=button type=submit> Log in </button>
+                        </form>
+                    </section>
+                </div>
+            </section>
+            <div class="footer-wrapper">
+            </div>
+        </div>
+    </body>
+</html>
+
+The most important part of the response is the following:
+
+<script>
+var isAdmin = false;
+if (isAdmin) {
+   var topLinksTag = document.getElementsByClassName("top-links")[0];
+   var adminPanelTag = document.createElement('a');
+   adminPanelTag.setAttribute('href', '/admin-RandomID');
+   adminPanelTag.innerText = 'Admin panel';
+   topLinksTag.append(adminPanelTag);
+   var pTag = document.createElement('p');
+   pTag.innerText = '|';
+   topLinksTag.appendChild(pTag);
+}
+</script>
+
+This script puts a link to the admin panel on the user interface if the user is a administrator, but this script can be seen by any user that request the login page, the location is in the line:
+
+adminPanelTag.setAttribute('href', '/admin-RandomID');
+
+I changed the real ID of the page with the word "RandomID", i believe is different for everybody but i decided it was better to obfuscate the ID. After this, i just request the page on my browser with the following URL:
+
+https://LAB_ID.web-security-academy.net/admin-RandomID
+
+and the admin panel with the users show up, to solve the lab, i just delete the user Carlos.
+
 
