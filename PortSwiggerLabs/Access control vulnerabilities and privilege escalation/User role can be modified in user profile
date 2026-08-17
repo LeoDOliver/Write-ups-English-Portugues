@@ -94,7 +94,7 @@ Te: trailers
   "roleid":2
 }
 
-After forwarding the request, i receveid the following response:
+After forwarding the request, i receive the following response:
 
 HTTP/2 302 Found
 Location: /my-account
