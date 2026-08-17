@@ -4,7 +4,8 @@ This lab has an admin panel at /admin. It's only accessible to logged-in users w
 Solve the lab by accessing the admin panel and using it to delete the user carlos.
 You can log in to your own account using the following credentials: wiener:peter 
 
-This lab has a vulnerability based on a parameter, by the description, the parameter is the roleid, so i try to enter the parameter on two different request, the first is in the login page and the second is the admin page, as follows:
+This lab has a vulnerability based on a parameter, by the description, the parameter is the roleid, so i try to enter the parameter on two different request, the first is in the login page and the second is the admin page, 
+as follows:
 
 Login Page Request:
 
